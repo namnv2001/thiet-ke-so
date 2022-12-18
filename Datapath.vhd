@@ -6,7 +6,6 @@ USE WORK.MY_PACKAGE.ALL;
 
 ENTITY Datapath IS 
 	GENERIC	(
-		DATA_WIDTH:	INTEGER;
 		ROW_IN:		INTEGER;
 		COL_IN:		INTEGER;
 		ROW_OUT:	INTEGER;
@@ -20,7 +19,7 @@ ENTITY Datapath IS
 		R_clr, Rs_clr, C_clr, Cs_clr:	IN STD_LOGIC;
 		R_inc, Rs_inc, C_inc, Cs_inc:	IN STD_LOGIC;
 		R_z, Rs_z, C_z, Cs_z, Gt:			OUT STD_LOGIC;
-		Data_in, Data_out:		IN INTEGER RANGE 0 TO 2**DATA_WIDTH - 1;
+		Data_in, Data_out:		IN INTEGER;
 		Data_in_addr:					OUT INTEGER RANGE 0 TO ROW_IN * COL_IN - 1;
 		Data_out_addr:				OUT INTEGER RANGE 0 TO ROW_OUT * COL_OUT - 1
 		);

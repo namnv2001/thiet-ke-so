@@ -5,7 +5,6 @@ USE WORK.MY_PACKAGE.ALL;
 
 ENTITY Max_pooling IS
 	GENERIC(
-		DATA_WIDTH:	INTEGER;
 		ROW_IN:		INTEGER;
 		COL_IN:		INTEGER;
 		ROW_OUT:	INTEGER;
@@ -29,14 +28,13 @@ ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
 	SIGNAL Re_in, Re_out, We_in, We_out:	STD_LOGIC;
 	SIGNAL Data_in_addr:	INTEGER RANGE 0 TO ROW_IN * COL_IN - 1;
 	SIGNAL Data_out_addr:	INTEGER RANGE 0 TO ROW_OUT * COL_OUT - 1;
-	SIGNAL Data_write_in:	INTEGER RANGE 0 TO 2**DATA_WIDTH - 1;
-	SIGNAL Data_read_in, Data_read_out:		INTEGER RANGE 0 TO 2**DATA_WIDTH - 1;
+	SIGNAL Data_write_in:	INTEGER;
+	SIGNAL Data_read_in, Data_read_out:	INTEGER;
 
 	BEGIN
 		----- Memory -----
 		U_Data_out : Data_out
 			GENERIC MAP(
-				DATA_WIDTH => DATA_WIDTH,
 				ROW_SIZE => ROW_OUT,
 				COL_SIZE => COL_OUT
 				)
@@ -51,7 +49,6 @@ ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
 		
 		U_Data_in : Data_in
 			GENERIC MAP(
-				DATA_WIDTH => DATA_WIDTH,
 				ROW_SIZE => ROW_IN,
 				COL_SIZE => COL_IN
 				)
@@ -65,8 +62,6 @@ ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
 				);
 
 		U_Controller : Controller
-			GENERIC MAP(DATA_WIDTH => DATA_WIDTH)
-
 			PORT MAP(
 				Clk => Clk,
 				Start => Start,
@@ -99,7 +94,6 @@ ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
 
 		U_Datapath : Datapath
 			GENERIC MAP(
-				DATA_WIDTH => DATA_WIDTH,
 				ROW_IN => ROW_IN,
 				COL_IN => COL_IN,
 				ROW_OUT => ROW_OUT,
