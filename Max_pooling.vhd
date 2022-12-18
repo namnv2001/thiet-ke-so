@@ -3,96 +3,95 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 USE WORK.MY_PACKAGE.ALL;
 
-ENTITY Max_pooling IS
+ENTITY max_pooling IS
 	GENERIC(
-		ROW_IN:		INTEGER;
-		COL_IN:		INTEGER;
-		ROW_OUT:	INTEGER;
-		COL_OUT:	INTEGER;
-		ROW_STEP:	INTEGER;
-		COL_STEP:	INTEGER
+		ROW_IN:		integer;
+		COL_IN:		integer;
+		ROW_OUT:	integer;
+		COL_OUT:	integer;
+		ROW_STEP:	integer;
+		COL_STEP:	integer
 		);
 	
 	PORT	(
-		Start, Clk, Reset:	IN STD_LOGIC;
-		Done: OUT STD_LOGIC
+		start, clk, reset:	IN std_logic;
+		done: OUT std_logic
 		);
 
-END Max_pooling;
+END max_pooling;
 
-ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
+ARCHITECTURE max_pooling_architecture OF max_pooling IS
 
-	SIGNAL R_clr, Rs_clr, C_clr, Cs_clr:	STD_LOGIC;
-	SIGNAL R_inc, Rs_inc, C_inc, Cs_inc:	STD_LOGIC;
-	SIGNAL R_z, Rs_z, C_z, Cs_z, Gt:			STD_LOGIC;
-	SIGNAL Re_in, Re_out, We_in, We_out:	STD_LOGIC;
-	SIGNAL Data_in_addr:	INTEGER RANGE 0 TO ROW_IN * COL_IN - 1;
-	SIGNAL Data_out_addr:	INTEGER RANGE 0 TO ROW_OUT * COL_OUT - 1;
-	SIGNAL Data_write_in:	INTEGER;
-	SIGNAL Data_read_in, Data_read_out:	INTEGER;
+	SIGNAL r_clear, rs_clear, c_clear, cs_clear:	std_logic;
+	SIGNAL r_increase, rs_increase, c_increase, cs_increase:	std_logic;
+	SIGNAL r_z, rs_z, c_z, cs_z, greater_than:			std_logic;
+	SIGNAL re_in, re_out, we_in, we_out:	std_logic;
+	SIGNAL data_in_address:	integer RANGE 0 TO ROW_IN * COL_IN - 1;
+	SIGNAL data_out_address:	integer RANGE 0 TO ROW_OUT * COL_OUT - 1;
+	SIGNAL data_write_in:	integer;
+	SIGNAL data_read_in, data_read_out:	integer;
 
 	BEGIN
 		----- Memory -----
-		U_Data_out : Data_out
+		U_Data_out : data_out
 			GENERIC MAP(
 				ROW_SIZE => ROW_OUT,
 				COL_SIZE => COL_OUT
 				)
 			PORT MAP(
-				Clk => Clk,
-				We_out => We_out,
-				Re_out => Re_out,
-				Addr => Data_out_addr,
-				Din => Data_read_in,
-				Dout => Data_read_out
+				clk => clk,
+				we_out => we_out,
+				re_out => re_out,
+				addr => data_out_address,
+				d_in => data_read_in,
+				d_out => data_read_out
 				);	
 		
-		U_Data_in : Data_in
+		U_Data_in : data_in
 			GENERIC MAP(
 				ROW_SIZE => ROW_IN,
 				COL_SIZE => COL_IN
 				)
 			PORT MAP(
-				Clk => Clk,
-				We_in => We_in,
-				Re_in => Re_in,
-				Addr => Data_in_addr,
-				Din => Data_write_in,
-				Dout => Data_read_in
+				clk => clk,
+				we_in => we_in,
+				re_in => re_in,
+				addr => data_in_address,
+				d_in => data_write_in,
+				d_out => data_read_in
 				);
 
-		U_Controller : Controller
+		U_Controller : controller
 			PORT MAP(
-				Clk => Clk,
-				Start => Start,
-				Reset => Reset,
+				clk => clk,
+				start => start,
+				reset => reset,
 
-				R_clr => R_clr,
-				Rs_clr => Rs_clr,
-				C_clr => C_clr,
-				Cs_clr => Cs_clr,
+				r_clear => r_clear,
+				rs_clear => rs_clear,
+				c_clear => c_clear,
+				cs_clear => cs_clear,
 
-				R_inc => R_inc,
-				Rs_inc => Rs_inc,
-				C_inc => C_inc,
-				Cs_inc => Cs_inc,
+				r_increase => r_increase,
+				rs_increase => rs_increase,
+				c_increase => c_increase,
+				cs_increase => cs_increase,
 
-				R_z => R_z,
-				Rs_z => Rs_z,
-				C_z => C_z,
-				Cs_z => Cs_z,
-				Gt => Gt,
+				r_z => r_z,
+				rs_z => rs_z,
+				c_z => c_z,
+				cs_z => cs_z,
+				greater_than => greater_than,
 
-				Re_in => Re_in,
-				Re_out => Re_out,
-				We_in => We_in,
-				We_out => We_out,
+				re_in => re_in,
+				re_out => re_out,
+				we_in => we_in,
+				we_out => we_out,
 				
-				
-				Done => Done
+				done => done
 				);
 
-		U_Datapath : Datapath
+		U_Datapath : datapath
 			GENERIC MAP(
 				ROW_IN => ROW_IN,
 				COL_IN => COL_IN,
@@ -102,29 +101,29 @@ ARCHITECTURE Max_pooling_architecture OF Max_pooling IS
 				COL_STEP => COL_STEP
 				)
 			PORT MAP(
-				Clk => Clk,
+				clk => clk,
 
-				R_clr => R_clr,
-				Rs_clr => Rs_clr,
-				C_clr => C_clr,
-				Cs_clr => Cs_clr,
+				r_clear => r_clear,
+				rs_clear => rs_clear,
+				c_clear => c_clear,
+				cs_clear => cs_clear,
 
-				R_inc => R_inc,
-				Rs_inc => Rs_inc,
-				C_inc => C_inc,
-				Cs_inc => Cs_inc,
+				r_increase => r_increase,
+				rs_increase => rs_increase,
+				c_increase => c_increase,
+				cs_increase => cs_increase,
 
-				Data_in => Data_read_in,
-				Data_out => Data_read_out,
+				data_in => data_read_in,
+				data_out => data_read_out,
 
-				R_z => R_z,
-				Rs_z => Rs_z,
-				C_z => C_z,
-				Cs_z => Cs_z,
-				Gt => Gt,
-				Data_in_addr => Data_in_addr,
-				Data_out_addr => Data_out_addr
+				r_z => r_z,
+				rs_z => rs_z,
+				c_z => c_z,
+				cs_z => cs_z,
+				greater_than => greater_than,
+				data_in_address => data_in_address,
+				data_out_address => data_out_address
 				);
 
-END Max_pooling_architecture;
+END max_pooling_architecture;
 

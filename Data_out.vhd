@@ -2,37 +2,37 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
-ENTITY Data_out IS 
+ENTITY data_out IS 
 	GENERIC	(
-		ROW_SIZE:	INTEGER;
-		COL_SIZE:	INTEGER
+		ROW_SIZE:	integer;
+		COL_SIZE:	integer
 		);
 
 	PORT	(
-		Clk:		IN STD_LOGIC;
-		We_out:	IN STD_LOGIC;
-		Re_out:	IN STD_LOGIC;
-		Addr:		IN INTEGER RANGE 0 TO COL_SIZE * ROW_SIZE - 1;
-		Din:		IN INTEGER;
-		Dout:		OUT INTEGER
+		clk:		IN std_logic;
+		we_out:	IN std_logic;
+		re_out:	IN std_logic;
+		addr:		IN integer RANGE 0 TO COL_SIZE * ROW_SIZE - 1;
+		d_in:		IN integer;
+		d_out:	OUT integer
 		);
-END Data_out;
+END data_out;
 
-ARCHITECTURE Data_out_architecture OF Data_out IS
-	TYPE DATA_ARRAY IS ARRAY(0 TO COL_SIZE * ROW_SIZE - 1) OF INTEGER;	--Memory Type
-	SIGNAL Matrix_out : DATA_ARRAY := (OTHERS => 0);
+ARCHITECTURE data_out_architecture OF data_out IS
+	TYPE DATA_ARRAY IS ARRAY(0 TO COL_SIZE * ROW_SIZE - 1) OF integer;
+	SIGNAL matrix_out : DATA_ARRAY := (OTHERS => 0);
 	BEGIN
-		PROCESS(Clk)
+		PROCESS(clk)
 		BEGIN
-			IF (Clk'Event AND Clk = '1') THEN
-				IF (We_out = '1') THEN 
-					Matrix_out(Addr) <= Din;
+			IF (clk'Event AND clk = '1') THEN
+				IF (we_out = '1') THEN 
+					matrix_out(addr) <= d_in;
 				ELSE 
-					IF (Re_out = '1') THEN
-						Dout <= Matrix_out(Addr);
+					IF (re_out = '1') THEN
+						d_out <= matrix_out(addr);
 					END IF;
 				END IF;
 			END IF;
 		END PROCESS;
-END Data_out_architecture;
+END data_out_architecture;
 

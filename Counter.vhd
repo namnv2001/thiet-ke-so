@@ -2,35 +2,35 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
-ENTITY Counter IS 
-	GENERIC (Ceil_value: INTEGER);
+ENTITY counter IS 
+	GENERIC (ceil_value: integer);
 	PORT(
-		Clk, Inc, Clr: IN STD_LOGIC;
-		Z: 			OUT STD_LOGIC;
-		Count: 	OUT INTEGER RANGE 0 TO Ceil_value
+		clk, inc, clr: IN std_logic;
+		z: 			OUT std_logic;
+		count: 	OUT integer RANGE 0 TO ceil_value
 		);
-END Counter;
+END counter;
 
-ARCHITECTURE Counter_architecture OF Counter IS
-	SIGNAL Temp_counter: INTEGER RANGE 0 TO Ceil_value;
+ARCHITECTURE counter_architecture OF counter IS
+	SIGNAL temp_counter: integer RANGE 0 TO ceil_value;
 	BEGIN 
 		PROCESS	
 			BEGIN 
-			WAIT UNTIL (Clk'Event AND Clk = '1');
-			IF Clr = '1' THEN
-				Temp_counter <= 0;
-				Z <= '0';
+			WAIT UNTIL (clk'Event AND clk = '1');
+			IF clr = '1' THEN
+				temp_counter <= 0;
+				z <= '0';
 			ELSE 
-				IF Inc = '1' THEN
-				IF Temp_counter =  Ceil_value - 1 THEN
-					Z <= '1';
+				IF inc = '1' THEN
+				IF temp_counter =  ceil_value - 1 THEN
+					z <= '1';
 				ELSE 
-					Temp_counter <= Temp_counter + 1;
-					Z <= '0';
+					temp_counter <= temp_counter + 1;
+					z <= '0';
 				END IF;
 				END IF;
 			END IF;
 		END PROCESS;
-	Count <= Temp_counter;
-END Counter_architecture;
+	count <= temp_counter;
+END counter_architecture;
 

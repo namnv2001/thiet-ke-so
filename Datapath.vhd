@@ -4,81 +4,81 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 USE WORK.MY_PACKAGE.ALL;
 
-ENTITY Datapath IS 
+ENTITY datapath IS 
 	GENERIC	(
-		ROW_IN:		INTEGER;
-		COL_IN:		INTEGER;
-		ROW_OUT:	INTEGER;
-		COL_OUT:	INTEGER;
-		ROW_STEP:	INTEGER;
-		COL_STEP:	INTEGER
+		ROW_IN:		integer;
+		COL_IN:		integer;
+		ROW_OUT:	integer;
+		COL_OUT:	integer;
+		ROW_STEP:	integer;
+		COL_STEP:	integer
 		);
 
 	PORT	(
-		Clk:	IN STD_LOGIC;
-		R_clr, Rs_clr, C_clr, Cs_clr:	IN STD_LOGIC;
-		R_inc, Rs_inc, C_inc, Cs_inc:	IN STD_LOGIC;
-		R_z, Rs_z, C_z, Cs_z, Gt:			OUT STD_LOGIC;
-		Data_in, Data_out:		IN INTEGER;
-		Data_in_addr:					OUT INTEGER RANGE 0 TO ROW_IN * COL_IN - 1;
-		Data_out_addr:				OUT INTEGER RANGE 0 TO ROW_OUT * COL_OUT - 1
+		clk:	IN std_logic;
+		r_clear, rs_clear, c_clear, cs_clear:	IN std_logic;
+		r_increase, rs_increase, c_increase, cs_increase:	IN std_logic;
+		r_z, rs_z, c_z, cs_z, greater_than:		OUT std_logic;
+		data_in, data_out:	IN integer;
+		data_in_address:		OUT integer RANGE 0 TO ROW_IN * COL_IN - 1;
+		data_out_address:		OUT integer RANGE 0 TO ROW_OUT * COL_OUT - 1
 		);
-END Datapath;
+END datapath;
 
-ARCHITECTURE Datapath_architecture OF Datapath IS
+ARCHITECTURE datapath_architecture OF datapath IS
 	
-	SIGNAL Count_r:		INTEGER RANGE 0 TO ROW_OUT;
-	SIGNAL Count_rs:	INTEGER RANGE 0 TO ROW_STEP;
-	SIGNAL Count_c:		INTEGER RANGE 0 TO COL_OUT;
-	SIGNAL Count_cs:	INTEGER RANGE 0 TO COL_STEP;
+	SIGNAL count_r:		integer RANGE 0 TO ROW_OUT;
+	SIGNAL count_rs:	integer RANGE 0 TO ROW_STEP;
+	SIGNAL count_c:		integer RANGE 0 TO COL_OUT;
+	SIGNAL count_cs:	integer RANGE 0 TO COL_STEP;
 	
 	BEGIN
-	-- Counter
-	Cnt_r:	Counter 
-		GENERIC MAP(Ceil_value => ROW_OUT)
+	-- counter
+	Cnt_r:	counter 
+		GENERIC MAP(ceil_value => ROW_OUT)
 
 		PORT MAP(
-			Clk	=> Clk,
-			Inc	=> R_inc,
-			Clr	=> R_clr,
-			Z 	=> R_z,
-			Count	=> Count_r
+			clk		=> clk,
+			inc		=> r_increase,
+			clr		=> r_clear,
+			z 		=> r_z,
+			count	=> count_r
 			);
-	Cnt_rs:	Counter
-		GENERIC MAP(Ceil_value => ROW_STEP)
+	Cnt_rs:	counter
+		GENERIC MAP(ceil_value => ROW_STEP)
 		
 		PORT MAP(
-			Clk	=> Clk,
-			Inc	=> Rs_inc,
-			Clr	=> Rs_clr,
-			Z	=> Rs_z,
-			Count 	=> Count_rs
+			clk		=> clk,
+			inc		=> rs_increase,
+			clr		=> rs_clear,
+			z			=> rs_z,
+			count => count_rs
 			);
-	Cnt_c:	Counter
-		GENERIC MAP (Ceil_value => COL_OUT)
+	Cnt_c:	counter
+		GENERIC MAP (ceil_value => COL_OUT)
 
 		PORT MAP(
-			Clk	=> Clk,
-			Inc	=> C_inc,
-			Clr	=> C_clr,
-			Z	=> C_z,
-			Count	=> Count_c
+			clk		=> clk,
+			inc		=> c_increase,
+			clr		=> c_clear,
+			z			=> c_z,
+			count	=> count_c
 			);
-	Cnt_cs:	Counter
-		GENERIC MAP (Ceil_value => COL_STEP)
+	Cnt_cs:	counter
+		GENERIC MAP (ceil_value => COL_STEP)
 		
 		PORT MAP (
-			Clk	=> Clk,
-			Inc	=> Cs_inc,
-			Clr	=> Cs_clr,
-			Z	=> Cs_z,
-			Count	=> Count_cs
+			clk		=> clk,
+			inc		=> cs_increase,
+			clr		=> cs_clear,
+			z			=> cs_z,
+			count	=> count_cs
 			);
 	-- Address
 	
-	Data_in_addr	<= (Count_r * ROW_STEP + Count_rs) * ROW_IN + Count_c * COL_STEP + Count_cs;
-	Data_out_addr	<= Count_r * ROW_OUT + Count_c;
-	Gt <= '1' WHEN Data_in > Data_out ELSE '0';
+	data_in_address	<= (count_r * ROW_STEP + count_rs) * ROW_IN + count_c * COL_STEP + count_cs;
+	data_out_address	<= count_r * ROW_OUT + count_c;
+	greater_than <= '1' WHEN data_in > data_out ELSE '0';
 	
-END Datapath_architecture;
+END datapath_architecture;
 

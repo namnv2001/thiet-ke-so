@@ -3,99 +3,99 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 PACKAGE MY_PACKAGE IS
 
-COMPONENT Counter IS
-	GENERIC	(Ceil_value: INTEGER);
+COMPONENT counter IS
+	GENERIC	(ceil_value: integer);
 
 	PORT	(
-		Clk, Inc, Clr:	IN STD_LOGIC;
-		Z:			OUT STD_LOGIC;
-		Count:	OUT INTEGER RANGE 0 TO Ceil_value
+		clk, inc, clr:	IN std_logic;
+		z:			OUT std_logic;
+		count:	OUT integer RANGE 0 TO ceil_value
 		);
 END COMPONENT;
 
-COMPONENT Data_out IS
+COMPONENT data_out IS
 	GENERIC (
-		ROW_SIZE:		INTEGER;
-		COL_SIZE:		INTEGER
+		ROW_SIZE:		integer;
+		COL_SIZE:		integer
 		);
 	
 	PORT	(
-		Clk:		IN STD_LOGIC;
-		We_out:	IN STD_LOGIC;
-		Re_out:	IN STD_LOGIC;
-		Addr:		IN INTEGER RANGE 0 TO ROW_SIZE * COL_SIZE - 1;
-		Din:		IN INTEGER;
-		Dout:		OUT INTEGER
+		clk:		IN std_logic;
+		we_out:	IN std_logic;
+		re_out:	IN std_logic;
+		addr:		IN integer RANGE 0 TO ROW_SIZE * COL_SIZE - 1;
+		d_in:		IN integer;
+		d_out:	OUT integer
 		);		
 END COMPONENT;
 
-COMPONENT Data_in IS
+COMPONENT data_in IS
 	GENERIC (
-		ROW_SIZE:		INTEGER;
-		COL_SIZE:		INTEGER
+		ROW_SIZE:		integer;
+		COL_SIZE:		integer
 		);
 	
 	PORT	(
-		Clk:		IN STD_LOGIC;
-		We_in:	IN STD_LOGIC;
-		Re_in:	IN STD_LOGIC;
-		Addr:		IN INTEGER RANGE 0 TO ROW_SIZE * COL_SIZE - 1;
-		Din:		IN INTEGER;
-		Dout:		OUT INTEGER
+		clk:		IN std_logic;
+		we_in:	IN std_logic;
+		re_in:	IN std_logic;
+		addr:		IN integer RANGE 0 TO ROW_SIZE * COL_SIZE - 1;
+		d_in:		IN integer;
+		d_out:	OUT integer
 		);		
 END COMPONENT;
 
-COMPONENT Controller IS
+COMPONENT controller IS
 
 	PORT	(
-		Start:	IN STD_LOGIC;
-		Clk:		IN STD_LOGIC;
-		Reset:	IN STD_LOGIC;
-		R_z, Rs_z, C_z, Cs_z, Gt:			IN STD_LOGIC;
-		R_clr, Rs_Clr, C_clr, Cs_clr:	OUT STD_LOGIC;
-		R_inc, Rs_inc, C_inc, Cs_inc:	OUT STD_LOGIC;
-		Re_in, Re_out, We_in, We_out:	OUT STD_LOGIC;
-		Done:		OUT STD_LOGIC
+		start:	IN std_logic;
+		clk:		IN std_logic;
+		reset:	IN std_logic;
+		r_z, rs_z, c_z, cs_z, greater_than:	IN std_logic;
+		r_clear, rs_clear, c_clear, cs_clear:	OUT std_logic;
+		r_increase, rs_increase, c_increase, cs_increase:	OUT std_logic;
+		re_in, re_out, we_in, we_out:	OUT std_logic;
+		done:		OUT std_logic
 		);
 END COMPONENT;
 
-COMPONENT Datapath IS
+COMPONENT datapath IS
 	GENERIC	(
-		ROW_IN:		INTEGER;
-		COL_IN:		INTEGER;
-		ROW_OUT:	INTEGER;
-		COL_OUT:	INTEGER;
-		ROW_STEP:	INTEGER;
-		COL_STEP:	INTEGER
+		ROW_IN:		integer;
+		COL_IN:		integer;
+		ROW_OUT:	integer;
+		COL_OUT:	integer;
+		ROW_STEP:	integer;
+		COL_STEP:	integer
 		);
 
 	
 	PORT	(
-		Clk:	IN STD_LOGIC;
-		R_clr, Rs_clr, C_clr, Cs_clr:	IN STD_LOGIC;
-		R_inc, Rs_inc, C_inc, Cs_inc:	IN STD_LOGIC;
-		Data_in, Data_out:	IN INTEGER;
-		R_z, Rs_z, C_z, Cs_z, Gt:		OUT STD_LOGIC;
-		Data_in_addr:		OUT INTEGER RANGE 0 TO ROW_IN * COL_IN - 1;
-		Data_out_addr:	OUT INTEGER RANGE 0 TO ROW_OUT * COL_OUT - 1
+		clk:	IN std_logic;
+		r_clear, rs_clear, c_clear, cs_clear:	IN std_logic;
+		r_increase, rs_increase, c_increase, cs_increase:	IN std_logic;
+		data_in, data_out:	IN integer;
+		r_z, rs_z, c_z, cs_z, greater_than:		OUT std_logic;
+		data_in_address:		OUT integer RANGE 0 TO ROW_IN * COL_IN - 1;
+		data_out_address:	OUT integer RANGE 0 TO ROW_OUT * COL_OUT - 1
 		);
 END COMPONENT;
 
-COMPONENT Max_pooling IS
+COMPONENT max_pooling IS
 	GENERIC	(
-		ROW_IN:		INTEGER;
-		COL_IN:		INTEGER;
-		ROW_OUT:	INTEGER;
-		COL_OUT:	INTEGER;
-		ROW_STEP:	INTEGER;
-		COL_STEP:	INTEGER
+		ROW_IN:		integer;
+		COL_IN:		integer;
+		ROW_OUT:	integer;
+		COL_OUT:	integer;
+		ROW_STEP:	integer;
+		COL_STEP:	integer
 		);
 		
 	PORT	(
-		Clk:		IN STD_LOGIC;
-		Start:	IN STD_LOGIC;
-		Reset:	IN STD_LOGIC;		
-		Done:		OUT STD_LOGIC
+		clk:		IN std_logic;
+		start:	IN std_logic;
+		reset:	IN std_logic;		
+		done:		OUT std_logic
 		);	
 END COMPONENT;	
 
